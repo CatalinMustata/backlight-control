@@ -23,7 +23,7 @@ export default class BacklightService {
      */
     public setBacklight(value?: number) {
         // if no value, display should be off
-        if (!value) {
+        if (value === null) {
             this.backlightCtrl.pwmWrite(0)
             return
         }
