@@ -3,7 +3,7 @@ import BacklightService from "../services/backlightService"
 export default class BacklightController {
     private backlightService = new BacklightService();
 
-    private isDisplayOn: boolean
+    private isDisplayOn: boolean = true
 
     private backlightValue: number = 100
 
