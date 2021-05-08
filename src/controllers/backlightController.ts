@@ -17,6 +17,7 @@ export default class BacklightController {
     }
 
     public setBacklight(value: number) {
+        this.backlightValue = value
         if (this.isDisplayOn) {
             this.backlightService.setBacklight(value)
         }
