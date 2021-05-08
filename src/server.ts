@@ -4,7 +4,6 @@ import prepareRoutes from "./routes"
 const init = async () => {
     console.log("Initializing...")
     const server = new Server({
-        host: "localhost",
         port: "8713"
     })
 
