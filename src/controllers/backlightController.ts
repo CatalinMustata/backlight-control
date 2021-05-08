@@ -5,7 +5,7 @@ export default class BacklightController {
 
     private isDisplayOn: boolean
 
-    private backlightValue: number
+    private backlightValue: number = 100
 
     constructor() {
         // start monitoring I2C for light sensor

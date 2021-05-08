@@ -2,7 +2,7 @@ import { Gpio } from "pigpio"
 
 export default class BacklightService {
     private MIN_LEVEL = 45
-    private MAX_LEVEL = 255
+    private MAX_LEVEL = 180
     private AMBITUS = this.MAX_LEVEL - this.MIN_LEVEL
 
     private backlightCtrl: Gpio
