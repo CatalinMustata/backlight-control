@@ -31,7 +31,7 @@ export default class BacklightService {
         // clamp values to 0 - 100
         value = Math.min(Math.max(0, value), 100)
 
-        const dutyCycle = this.MIN_LEVEL + (value * this.AMBITUS) / 100
+        const dutyCycle = Math.floor(this.MIN_LEVEL + (value * this.AMBITUS) / 100)
 
         console.log(`Will set display PWM to ${dutyCycle}`)
         this.backlightCtrl.pwmWrite(dutyCycle)
