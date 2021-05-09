@@ -1,8 +1,9 @@
 import { Gpio } from "pigpio"
 
 export default class BacklightService {
-    private MIN_LEVEL = 45
-    private MAX_LEVEL = 255
+    private HW_PWM_FREQ = 20000
+    private MIN_LEVEL = 30000
+    private MAX_LEVEL = 100000
     private AMBITUS = this.MAX_LEVEL - this.MIN_LEVEL
 
     private backlightCtrl: Gpio
@@ -24,16 +25,16 @@ export default class BacklightService {
     public setBacklight(value?: number) {
         // if no value, display should be off
         if (value === null) {
-            this.backlightCtrl.pwmWrite(0)
+            this.backlightCtrl.hardwarePwmWrite(this.HW_PWM_FREQ, 0)
             return
         }
 
-        // clamp values to 0 - 100
+        // clamp values to 0 - 100%
         value = Math.min(Math.max(0, value), 100)
 
         const dutyCycle = Math.floor(this.MIN_LEVEL + (value * this.AMBITUS) / 100)
 
         console.log(`Will set display PWM to ${dutyCycle}`)
-        this.backlightCtrl.pwmWrite(dutyCycle)
+        this.backlightCtrl.hardwarePwmWrite(this.HW_PWM_FREQ, dutyCycle)
     }
 }
