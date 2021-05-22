@@ -1,4 +1,4 @@
-import { LightSensorService } from "services/lightSensorService";
+import { LightSensorService } from "../services/lightSensorService";
 import BacklightService from "../services/backlightService"
 
 export default class BacklightController {
