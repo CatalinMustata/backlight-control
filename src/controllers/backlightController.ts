@@ -2,7 +2,7 @@ import { LightSensorService } from "services/lightSensorService";
 import BacklightService from "../services/backlightService"
 
 export default class BacklightController {
-    private backlightService
+    private backlightService: BacklightService
 
     private lightSensorService = new LightSensorService()
 

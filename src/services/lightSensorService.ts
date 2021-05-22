@@ -25,6 +25,7 @@ export class LightSensorService {
     }
 
     public init() {
+        console.log("Scanning for I2C devices")
         const devices = this.bus.scanSync()
         console.log(`Found devices ${JSON.stringify(devices)}`)
         this.sensorAddr = devices.find(device => device == this.I2C_ID_VCNL4010)
