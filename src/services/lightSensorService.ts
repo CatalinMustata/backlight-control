@@ -21,7 +21,9 @@ export class LightSensorService {
     private measureTimer = null
 
     constructor() {
+        console.log("Initializing I2C bus")
         this.bus = openSync(1, { forceAccess: true })
+        console.log(`Bus available: ${this.bus}`)
     }
 
     public init() {
