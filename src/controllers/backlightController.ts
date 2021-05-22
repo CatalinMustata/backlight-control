@@ -1,7 +1,10 @@
+import { LightSensorService } from "services/lightSensorService";
 import BacklightService from "../services/backlightService"
 
 export default class BacklightController {
-    private backlightService = new BacklightService();
+    private backlightService
+
+    private lightSensorService = new LightSensorService()
 
     private isDisplayOn: boolean = true
 
@@ -9,6 +12,9 @@ export default class BacklightController {
 
     constructor() {
         // start monitoring I2C for light sensor
+        this.lightSensorService.init()
+
+        this.backlightService = new BacklightService(this.lightSensorService)
     }
 
     public setDisplay(enabled: boolean) {
