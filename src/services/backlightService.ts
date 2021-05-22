@@ -19,7 +19,7 @@ export default class BacklightService implements Listener {
     }
 
     lightMeasurementChanged(value: number) {
-        console.log(`Light value changed to: ${value}`)
+        // console.log(`Light value changed to: ${value}`)
     }
 
     /**
