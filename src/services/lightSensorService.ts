@@ -70,10 +70,10 @@ export class LightSensorService {
             // start on-demand measurement
             this.bus.writeByteSync(this.sensorAddr, 0x80, 0b00010000)
 
-            this.bus.readI2cBlockSync(this.sensorAddr, 0x85, 4, readBuffer)
+            this.bus.readI2cBlockSync(this.sensorAddr, 0x85, 4, this.readBuffer)
 
             // ambient light value is 0.25 lux per count
-            var light = Math.round(readBuffer.readUInt16BE(0) * this.luxPerCount)
+            var light = Math.round(this.readBuffer.readUInt16BE(0) * this.luxPerCount)
 
             this.listeners.forEach(listener => listener.lightMeasurementChanged(light))
         }, this.MEASURE_INTERVAL_MS)
