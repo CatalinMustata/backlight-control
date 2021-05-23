@@ -1,7 +1,6 @@
 import { Gpio } from "pigpio"
-import { LightSensorService, Listener } from "./lightSensorService"
 
-export default class BacklightService implements Listener {
+export default class BacklightService {
     private HW_PWM_FREQ = 20000
     private MIN_LEVEL = 30000
     private MAX_LEVEL = 100000
@@ -9,17 +8,11 @@ export default class BacklightService implements Listener {
 
     private backlightCtrl: Gpio
 
-    constructor(lightSensorService: LightSensorService) {
+    constructor() {
         if (process.env.LOCAL_MODE) return
 
         console.log("Initializing backlight control")
         this.backlightCtrl = new Gpio(19, { mode: Gpio.OUTPUT })
-
-        lightSensorService.registerListener(this)
-    }
-
-    lightMeasurementChanged(value: number) {
-        // console.log(`Light value changed to: ${value}`)
     }
 
     /**

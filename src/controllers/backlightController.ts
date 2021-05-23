@@ -1,8 +1,15 @@
-import { LightSensorService } from "../services/lightSensorService";
+import { LightSensorService, Listener } from "../services/lightSensorService";
 import BacklightService from "../services/backlightService"
 
-export default class BacklightController {
-    private backlightService: BacklightService
+export default class BacklightController implements Listener {
+    /* value at which to clamp ambiental light values coming from the LightSensorService
+     * While light can vary dramatically, our backlight is limited and can't track ambiental 1:1
+     * As such, we'll try to map backlight to ambiental on a "sane" range, and max out backlight
+     * at this treshold value
+     */
+    private readonly MAX_ROOM_LUX = 750
+
+    private backlightService = new BacklightService()
 
     private lightSensorService = new LightSensorService()
 
@@ -10,11 +17,22 @@ export default class BacklightController {
 
     private backlightValue: number = 100
 
+    private ambientalLightValue: number = 256
+
     constructor() {
         // start monitoring I2C for light sensor
         this.lightSensorService.init()
 
-        this.backlightService = new BacklightService(this.lightSensorService)
+        this.lightSensorService.registerListener(this)
+    }
+
+    lightMeasurementChanged(value: number) {
+        if (value != this.ambientalLightValue) {
+            console.log(`Light value changed to: ${value}`)
+            this.ambientalLightValue = value
+
+            this.autoAdjustBacklight(value)
+        }
     }
 
     public setDisplay(enabled: boolean) {
@@ -26,6 +44,17 @@ export default class BacklightController {
         this.backlightValue = value
         if (this.isDisplayOn) {
             this.backlightService.setBacklight(value)
+        }
+    }
+
+    private autoAdjustBacklight(value: number) {
+        // clamp ambient
+        const ambientLight = Math.min(value, this.MAX_ROOM_LUX)
+
+        const backlightValue = Math.round(ambientLight / this.MAX_ROOM_LUX)
+
+        if (this.isDisplayOn) {
+            this.backlightService.setBacklight(backlightValue)
         }
     }
 }
