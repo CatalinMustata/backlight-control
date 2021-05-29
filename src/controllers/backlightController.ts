@@ -42,6 +42,7 @@ export default class BacklightController implements Listener {
         this.isDisplayOn = enabled
 
         if (enabled) {
+            console.log(`Ambiental light value on display on is: ${this.ambientalLightValue}`)
             this.autoAdjustBacklight(this.ambientalLightValue)
         } else {
             this.backlightService.setBacklight(null)
@@ -59,7 +60,11 @@ export default class BacklightController implements Listener {
         // clamp ambient
         const ambientLight = Math.min(value, this.MAX_ROOM_LUX)
 
+        console.log(`Ambient light is: ${ambientLight}`)
+
         const backlightValue = Math.round((ambientLight / this.MAX_ROOM_LUX) * 100)
+
+        console.log(`Backlight value is: ${backlightValue}`)
 
         if (this.isDisplayOn) {
             this.backlightService.setBacklight(backlightValue)
