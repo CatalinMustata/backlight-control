@@ -72,10 +72,13 @@ export default class BacklightService {
         const transitionSteps = Math.abs(this.targetValue - this.currentValue)
         const step = (this.currentValue < this.targetValue) ? 1 : -1
 
+        console.log(`Step is ${step}`)
+
         this.transitionAnimator = setInterval(() => {
             // transition until we've reached the target value
             if (this.currentValue != this.targetValue) {
-                const dutyCycle = this.dutyCycleFor(this.currentValue + step)
+                this.currentValue += step
+                const dutyCycle = this.dutyCycleFor(this.currentValue)
                 console.log(`Will set display PWM to ${dutyCycle}`)
                 this.backlightCtrl.hardwarePwmWrite(this.HW_PWM_FREQ, dutyCycle)
             } else {
