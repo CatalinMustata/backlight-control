@@ -4,7 +4,12 @@ import prepareRoutes from "./routes"
 const init = async () => {
     console.log("Initializing...")
     const server = new Server({
-        port: "8713"
+        port: "8713",
+        routes: {
+            cors: {
+                origin: ["http://localhost:*"]
+            }
+        }
     })
 
     const routes = prepareRoutes()
