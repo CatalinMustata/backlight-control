@@ -8,7 +8,7 @@ export default class BacklightService {
 
     private backlightCtrl: Gpio
 
-    private currentValue: number
+    private currentValue: number = 50
 
     private targetValue: number
 
@@ -22,6 +22,8 @@ export default class BacklightService {
 
         console.log("Initializing backlight control")
         this.backlightCtrl = new Gpio(19, { mode: Gpio.OUTPUT })
+
+        this.setBacklightActual(this.currentValue)
     }
 
     /**
