@@ -38,6 +38,7 @@ export default class BacklightService {
         if (value === null) {
             this.currentValue = 0
             this.targetValue = 0
+            console.log(`Current is: ${this.currentValue}, target is ${this.targetValue}`)
             this.backlightCtrl.hardwarePwmWrite(this.HW_PWM_FREQ, 0)
             return
         }
@@ -52,6 +53,7 @@ export default class BacklightService {
         }
 
         // transition in 1% steps
+        console.log(`Current is: ${this.currentValue}, target is ${this.targetValue}`)
         const transitionSteps = Math.abs(this.targetValue - this.currentValue)
         const step = (this.currentValue < this.targetValue) ? 1 : -1
 
