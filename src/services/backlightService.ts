@@ -71,8 +71,6 @@ export default class BacklightService {
         const transitionSteps = Math.abs(this.targetValue - this.currentValue)
         const step = (this.currentValue < this.targetValue) ? 1 : -1
 
-        console.log(`Step is ${step}`)
-
         this.transitionAnimator = setInterval(() => {
             // transition until we've reached the target value
             if (this.currentValue != this.targetValue) {
