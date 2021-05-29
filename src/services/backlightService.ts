@@ -63,6 +63,7 @@ export default class BacklightService {
             const targetDutyCycle = this.dutyCycleFor(this.targetValue)
             console.log(`Target dutyCycle is ${targetDutyCycle}`)
             this.backlightCtrl.hardwarePwmWrite(this.HW_PWM_FREQ, targetDutyCycle)
+            return
         }
 
         // stop current transition
