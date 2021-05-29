@@ -53,12 +53,15 @@ export default class BacklightService {
 
     private transitionBacklight() {
         if (this.targetValue === null) { // turn display off
+            console.log("Turn off")
             this.currentValue = null
             this.backlightCtrl.hardwarePwmWrite(this.HW_PWM_FREQ, 0)
             return
         } else if (this.currentValue === null) { // turn display on to target value
+            console.log("Turn on")
             this.currentValue = this.targetValue
             const targetDutyCycle = this.dutyCycleFor(this.targetValue)
+            console.log(`Target dutyCycle is ${targetDutyCycle}`)
             this.backlightCtrl.hardwarePwmWrite(this.HW_PWM_FREQ, targetDutyCycle)
         }
 
