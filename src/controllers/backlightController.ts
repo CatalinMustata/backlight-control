@@ -9,6 +9,8 @@ export default class BacklightController implements Listener {
      */
     private readonly MAX_ROOM_LUX = 750
 
+    private readonly CHANGE_THRESHOLD_LUX = 5
+
     private backlightService = new BacklightService()
 
     private lightSensorService = new LightSensorService()
@@ -27,7 +29,8 @@ export default class BacklightController implements Listener {
     }
 
     lightMeasurementChanged(value: number) {
-        if (value != this.ambientalLightValue) {
+        // add hysteresis through the change threshold
+        if (value != this.ambientalLightValue && Math.abs(value - this.ambientalLightValue) > this.CHANGE_THRESHOLD_LUX) {
             console.log(`Light value changed to: ${value}`)
             this.ambientalLightValue = value
 
