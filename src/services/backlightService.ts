@@ -51,14 +51,11 @@ export default class BacklightService {
     }
 
     private transitionBacklight() {
-        console.log("transition backlight")
         if (this.targetValue === null) { // turn display off
-            console.log("display will be off")
             this.currentValue = null
             this.backlightCtrl.hardwarePwmWrite(this.HW_PWM_FREQ, 0)
             return
         } else if (this.currentValue === null) { // turn display on to target value
-            console.log("display was off, turning on")
             this.currentValue = this.targetValue
             const targetDutyCycle = this.dutyCycleFor(this.targetValue)
             this.backlightCtrl.hardwarePwmWrite(this.HW_PWM_FREQ, targetDutyCycle)
@@ -72,7 +69,6 @@ export default class BacklightService {
 
         // transition in 1% steps
         const transitionSteps = Math.abs(this.targetValue - this.currentValue)
-        console.log(`Will transition in ${transitionSteps} from ${this.currentValue} to ${this.targetValue}`)
         const step = (this.currentValue < this.targetValue) ? 1 : -1
 
         this.transitionAnimator = setInterval(() => {
