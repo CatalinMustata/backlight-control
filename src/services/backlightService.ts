@@ -39,7 +39,7 @@ export default class BacklightService {
         if (value === null) {
             this.targetValue = null
             console.log(`Current is: ${this.currentValue}, target is ${this.targetValue}`)
-            this.transitionBacklight
+            this.transitionBacklight()
             return
         }
 
