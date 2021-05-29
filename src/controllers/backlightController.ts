@@ -37,7 +37,12 @@ export default class BacklightController implements Listener {
 
     public setDisplay(enabled: boolean) {
         this.isDisplayOn = enabled
-        this.backlightService.setBacklight(enabled ? this.backlightValue : null)
+
+        if (enabled) {
+            this.autoAdjustBacklight(this.ambientalLightValue)
+        } else {
+            this.backlightService.setBacklight(null)
+        }
     }
 
     public setBacklight(value: number) {
