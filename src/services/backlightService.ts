@@ -2,8 +2,8 @@ import { Gpio } from "pigpio"
 
 export default class BacklightService {
     private HW_PWM_FREQ = 20000
-    private MIN_LEVEL = 30000
-    private MAX_LEVEL = 100000
+    private MIN_LEVEL = 28000
+    private MAX_LEVEL = 120000
     private AMBITUS = this.MAX_LEVEL - this.MIN_LEVEL
 
     private backlightCtrl: Gpio
@@ -38,7 +38,6 @@ export default class BacklightService {
         // if no value, display should be off
         if (value === null) {
             this.targetValue = null
-            console.log(`Current is: ${this.currentValue}, target is ${this.targetValue}`)
             this.transitionBacklight()
             return
         }
@@ -53,15 +52,12 @@ export default class BacklightService {
 
     private transitionBacklight() {
         if (this.targetValue === null) { // turn display off
-            console.log("Turn off")
             this.currentValue = null
             this.backlightCtrl.hardwarePwmWrite(this.HW_PWM_FREQ, 0)
             return
         } else if (this.currentValue === null) { // turn display on to target value
-            console.log("Turn on")
             this.currentValue = this.targetValue
             const targetDutyCycle = this.dutyCycleFor(this.targetValue)
-            console.log(`Target dutyCycle is ${targetDutyCycle}`)
             this.backlightCtrl.hardwarePwmWrite(this.HW_PWM_FREQ, targetDutyCycle)
             return
         }
@@ -72,7 +68,6 @@ export default class BacklightService {
         }
 
         // transition in 1% steps
-        console.log(`Current is: ${this.currentValue}, target is ${this.targetValue}`)
         const transitionSteps = Math.abs(this.targetValue - this.currentValue)
         const step = (this.currentValue < this.targetValue) ? 1 : -1
 
@@ -83,7 +78,6 @@ export default class BacklightService {
             if (this.currentValue != this.targetValue) {
                 this.currentValue += step
                 const dutyCycle = this.dutyCycleFor(this.currentValue)
-                console.log(`Will set display PWM to ${dutyCycle}`)
                 this.backlightCtrl.hardwarePwmWrite(this.HW_PWM_FREQ, dutyCycle)
             } else {
                 clearInterval(this.transitionAnimator)
