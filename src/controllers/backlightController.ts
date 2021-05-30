@@ -60,7 +60,7 @@ export default class BacklightController implements Listener {
         // clamp ambient
         const ambientLight = Math.min(value, this.MAX_ROOM_LUX)
 
-        const backlightValue = Math.round((ambientLight / this.MAX_ROOM_LUX) * 100)
+        const backlightValue = Math.round((ambientLight / this.MAX_ROOM_LUX) * BacklightService.ADJUSTMENT_RANGE)
 
         if (this.isDisplayOn) {
             this.backlightService.setBacklight(backlightValue)

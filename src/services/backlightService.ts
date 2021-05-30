@@ -1,10 +1,12 @@
 import { Gpio } from "pigpio"
 
 export default class BacklightService {
-    private HW_PWM_FREQ = 20000
-    private MIN_LEVEL = 28000
-    private MAX_LEVEL = 120000
-    private AMBITUS = this.MAX_LEVEL - this.MIN_LEVEL
+    private readonly HW_PWM_FREQ = 20000
+    private readonly MIN_LEVEL = 28000
+    private readonly MAX_LEVEL = 120000
+    private readonly AMBITUS = this.MAX_LEVEL - this.MIN_LEVEL
+
+    public static readonly ADJUSTMENT_RANGE = 1000
 
     private backlightCtrl: Gpio
 
@@ -42,8 +44,8 @@ export default class BacklightService {
             return
         }
 
-        // clamp values to 0 - 100%
-        value = Math.min(Math.max(0, value), 100)
+        // clamp values to 0 - 1000
+        value = Math.min(Math.max(0, value), BacklightService.ADJUSTMENT_RANGE)
 
         this.targetValue = value
 
@@ -80,6 +82,6 @@ export default class BacklightService {
     private dutyCycleFor(value: number | null) {
         if (value === null) return 0
 
-        return Math.floor(this.MIN_LEVEL + (value * this.AMBITUS) / 100)
+        return Math.floor(this.MIN_LEVEL + (value * this.AMBITUS) / BacklightService.ADJUSTMENT_RANGE)
     }
 }
