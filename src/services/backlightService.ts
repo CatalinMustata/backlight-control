@@ -15,7 +15,7 @@ export default class BacklightService {
     private transitionAnimator: NodeJS.Timeout | null
 
     // duration of any
-    private readonly TRANSITION_DURATION_MS = 4000
+    private readonly TRANSITION_STEP_MS = 100
 
     constructor() {
         // if running locally on a PC, there's no GPIO to play with
@@ -53,7 +53,7 @@ export default class BacklightService {
     private transitionBacklight() {
         if (this.targetValue === null) { // turn display off
             this.currentValue = null
-            this.backlightCtrl.hardwarePwmWrite(this.HW_PWM_FREQ, 0)
+            this.backlightCtrl.hardwarePwmWrite(0, 0)
             return
         } else if (this.currentValue === null) { // turn display on to target value
             this.currentValue = this.targetValue
@@ -62,16 +62,9 @@ export default class BacklightService {
             return
         }
 
-        // stop current transition
-        if (this.transitionAnimator) {
-            clearInterval(this.transitionAnimator)
-        }
-
-        // transition in 1% steps
-        const transitionSteps = Math.abs(this.targetValue - this.currentValue)
-        const step = (this.currentValue < this.targetValue) ? 1 : -1
-
         this.transitionAnimator = setInterval(() => {
+            // calculate direction for current transition step
+            const step = (this.currentValue < this.targetValue) ? 1 : -1
             // transition until we've reached the target value
             if (this.currentValue != this.targetValue) {
                 this.currentValue += step
@@ -81,7 +74,7 @@ export default class BacklightService {
                 clearInterval(this.transitionAnimator)
                 this.transitionAnimator = null
             }
-        }, this.TRANSITION_DURATION_MS / transitionSteps)
+        }, this.TRANSITION_STEP_MS)
     }
 
     private dutyCycleFor(value: number | null) {
