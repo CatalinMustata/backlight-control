@@ -1,0 +1,14 @@
+[Unit]
+Description=Backlight Service
+After=network.target
+
+[Service]
+ExecStart=bash start.sh
+WorkingDirectory=/home/pi/backlight-control
+StandardOutput=inherit
+StandardError=inherit
+Restart=always
+User=root
+
+[Install]
+WantedBy=multi-user.target
