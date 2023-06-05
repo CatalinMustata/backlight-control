@@ -14,6 +14,8 @@ export class LightSensorService {
     // sets the amount of light passing through a cosmetic window in front of the sensor
     private readonly WINDOW_TRANSPARENCY_FACTOR_PERC = 100
 
+    private initialised = false
+
     private luxPerCount = 0.25
 
     private bus: I2CBus
@@ -43,6 +45,11 @@ export class LightSensorService {
         console.log(`Found devices ${JSON.stringify(devices)}`)
         this.sensorAddr = devices.find(device => device == this.I2C_ID_VCNL4010)
 
+        if (!this.initialised) {
+            console.log("Failed to find light sensor. Auto dimming not available")
+            return
+        }
+
         console.log(`Found light sensor at ${this.sensorAddr}`)
 
         if (this.bus.readByteSync(this.sensorAddr, 0x81)) {
@@ -66,6 +73,8 @@ export class LightSensorService {
     }
 
     private startMeasurements() {
+        if (!this.initialised) return
+
         this.measureTimer = setInterval(() => {
             // start on-demand measurement
             this.bus.writeByteSync(this.sensorAddr, 0x80, 0b00010000)
@@ -77,6 +86,7 @@ export class LightSensorService {
 
             this.listeners.forEach(listener => listener.lightMeasurementChanged(light))
         }, this.MEASURE_INTERVAL_MS)
+        this.measurementsStarted = true
     }
 
     private stopMeasurements() {
